@@ -1,0 +1,4 @@
+git_management.*
+copilote_report.*
+*.bck
+**/__pycache__/
