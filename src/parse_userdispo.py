@@ -117,8 +117,6 @@ def parse_carefully(filename: str, print_info: bool = True, verbose: bool = Fals
             end_dt = datetime.fromtimestamp(int(end_ts))
             dur_days = (end_dt - start_dt).days
 
-            # print(exp_id)
-
             experiments.append(exp_id)
             starts.append(start_dt)
             finishes.append(end_dt.date())
