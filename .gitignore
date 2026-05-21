@@ -2,3 +2,5 @@ git_management.*
 copilote_report.*
 *.bck
 **/__pycache__/
+*_org
+**/*_org

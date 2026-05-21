@@ -60,6 +60,7 @@ class PlanFile:
             for raw_line in handle:
                 line = raw_line.strip()
                 if not line:
+                    print(f"Not line?:  {line}")
                     continue
                 if line.startswith("N"):
                     experiments.append(
@@ -103,8 +104,8 @@ class Schedule:
         end_date: Optional[str] = None,
     ) -> "Schedule":
 
-        # data = pd.DataFrame({"Start": dates, "id_exp": identifiers, "Duration": durations}) # ,<-- old Claude
-        data = pd.DataFrame({"Start": dates, "id_exp": identifiers})  # ,<-- new Claude, we will compute duration from the descriptor. (as in the orginl version)
+        # data = pd.DataFrame({"Start": dates, "id_exp": identifiers, "Duration": durations}) # ,<-- old `copilot`
+        data = pd.DataFrame({"Start": dates, "id_exp": identifiers})  # ,<-- new `copilot`, we will compute duration from the descriptor. (as in the orginl version)
         data["Start"] = pd.to_datetime(data["Start"], format="%m/%d/%Y")
         data = data.fillna(1)
 
