@@ -19,6 +19,11 @@ from plotly import offline
 from plotly.figure_factory import create_gantt
 import plotly.graph_objects as go
 
+try:
+    from .parse_userdispo import parse_carefully as parse_user_dispo
+except ImportError:
+    from parse_userdispo import parse_carefully as parse_user_dispo
+
 
 @dataclass(frozen=True)
 class ExperimentDescriptor:
@@ -93,6 +98,23 @@ class Schedule:
     ) -> "Schedule":
         exp, dates, durs = PlanFile(planfile).parse(print_info=print_info)
         return cls.from_records(dates, exp, durs, start_date=start_date, end_date=end_date)
+
+    @classmethod
+    def from_user_dispo(
+        cls,
+        filename: str | Path,
+        start_date: Optional[str] = None,
+        end_date: Optional[str] = None,
+        print_info: bool = True,
+        verbose: bool = False,
+    ) -> "Schedule":
+        df = parse_user_dispo(filename, print_info=print_info, verbose=verbose)
+        if start_date is not None:
+            df = df.loc[df["Start"] > pd.to_datetime(start_date)]
+        if end_date is not None:
+            df = df.loc[df["Start"] < pd.to_datetime(end_date)]
+        df = df.reset_index(drop=True)
+        return cls(df)
 
     @classmethod
     def from_records(
@@ -224,6 +246,16 @@ def import_from_plan(planfile, PrintInfo=True):
 
 def convert_to_dataframe(Date, Exp, Dur, startDate='2019-06-01', endDate=None):
     return Schedule.from_records(Date, Exp, Dur, start_date=startDate, end_date=endDate).df
+
+
+def from_user_dispo(filename, startDate='2019-06-01', endDate=None, print_info=True, verbose=False):
+    return Schedule.from_user_dispo(
+        filename,
+        start_date=startDate,
+        end_date=endDate,
+        print_info=print_info,
+        verbose=verbose,
+    )
 
 
 def plot_gantt(df, gantt_name="IN5 schedule", OffLine=True, Feries=None):
