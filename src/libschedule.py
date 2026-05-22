@@ -144,7 +144,11 @@ class Schedule:
         data["Task"] = [desc.task for desc in descriptors]
         data["AllDays"] = [desc.duration_days for desc in descriptors]
         data["SampleEnv"] = [desc.sample_env for desc in descriptors]
-        data["Finish"] = data["Start"] + pd.to_timedelta(data["AllDays"], unit="d")
+        data["Finish"] = data["Start"] + pd.to_timedelta(data["AllDays"], unit="D")
+
+        print('goes here')
+        
+        data['Finish'] = data['Finish'].map(lambda x: np.datetime64(x))
         data = data.fillna(1)
         data = data[["Task", "Start", "Finish", "Proposers", "AllDays", "SampleEnv", "id_exp"]]
 

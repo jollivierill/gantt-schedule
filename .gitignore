@@ -4,3 +4,5 @@ copilote_report.*
 **/__pycache__/
 *_org
 **/*_org
+*.html
+**/*.html

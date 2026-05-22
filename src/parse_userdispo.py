@@ -12,6 +12,7 @@ This module provides a single helper `parse_carefully` which returns a
 from __future__ import annotations
 
 from datetime import datetime
+import numpy as np
 from typing import List, Optional
 import pandas as pd
 
@@ -154,7 +155,10 @@ def parse_carefully(filename: str, print_info: bool = True, verbose: bool = Fals
 
     df["Bool"] = df.Experiment.map(lambda x: x.split(":")[0].upper() if x else "")
     df["User"] = df.Experiment.map(lambda x: x.split(":")[1] if len(x.split(":")) > 1 else "Unknown")
-    df = df[["Experiment", "User", "Start", "Finish", "Duration", "Bool"]]
+    df['Finish'] = df['Finish'].map(lambda x: np.datetime64(x))
+    df['Wishes'] = df.Bool.map(lambda x: 1 if x == 'YES' else 0)
+    df['Impossible dates'] = df.Bool.map(lambda x: 1 if x == 'NO' else 0)
+    df = df[["Experiment", "User", "Start", "Finish", "Duration", "Bool", "Wishes", "Impossible dates"]]
 
     return df
 
